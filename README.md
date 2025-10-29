@@ -79,6 +79,23 @@ my-proxies/
     }
     ```
 
+- `DELETE /del`
+  - **功能**: 删除一个指定的代理 IP。
+  - **查询参数**: `proxy` (string, required) - 需要删除的代理地址，例如 `http://84.17.47.150:9002`。
+  - **成功响应 (200 OK)**:
+    ```json
+    {
+      "status": "success",
+      "detail": "Proxy 'http://84.17.47.150:9002' deleted."
+    }
+    ```
+  - **失败响应 (404 Not Found)**:
+    ```json
+    {
+      "detail": "Proxy 'http://84.17.47.150:9002' not found."
+    }
+    ```
+
 ## 6. 部署 (使用 Docker Compose)
 
 本项目推荐使用 Docker Compose 进行一键部署，它会同时启动应用服务和 Redis 数据库。

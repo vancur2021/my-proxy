@@ -84,6 +84,19 @@ def count_proxies() -> int:
             return client.zcard(PROXY_KEY)
     return 0
 
+def delete_proxy(proxy: str) -> int:
+    """
+    从 Redis 中删除指定的单个代理 IP。
+    返回被删除的数量 (0 或 1)。
+    """
+    with get_redis_client() as client:
+        if client:
+            try:
+                return client.zrem(PROXY_KEY, proxy)
+            except redis.RedisError as e:
+                print(f"!!! Redis Error while deleting proxy: {e} !!!")
+    return 0
+
 def remove_proxies(proxies: set[str]):
     """
     从 Redis 中批量移除指定的代理 IP。

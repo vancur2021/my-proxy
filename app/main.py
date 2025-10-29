@@ -40,6 +40,16 @@ def get_proxy_count():
     count = crud.count_proxies()
     return {"count": count}
 
+@app.delete("/del", tags=["Proxy"], summary="删除一个指定代理")
+def delete_proxy_endpoint(proxy: str):
+    """
+    从代理池中删除一个指定的代理 IP。
+    """
+    deleted_count = crud.delete_proxy(proxy)
+    if deleted_count > 0:
+        return {"status": "success", "detail": f"Proxy '{proxy}' deleted."}
+    raise HTTPException(status_code=404, detail=f"Proxy '{proxy}' not found.")
+
 @app.get("/", tags=["Root"], summary="服务健康检查")
 def read_root():
     """
