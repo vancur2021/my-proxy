@@ -42,15 +42,15 @@ async def fetch_source_proxies() -> list[str]:
     """
     从源 URL 获取代理列表。
     """
-    url = "https://raw.kkgithub.com/proxifly/free-proxy-list/refs/heads/main/proxies/protocols/http/data.txt"
+    url = "https://raw.kkgithub.com/proxifly/free-proxy-list/refs/heads/main/proxies/all/data.txt"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, timeout=20)
             if response.status_code == 200:
                 proxies = response.text.strip().split('\n')
-                # 过滤掉 httpx 不支持的 socks4 代理
-                filtered_proxies = [p for p in proxies if not p.startswith("socks4://")]
-                print(f"Fetched {len(proxies)} proxies from source, {len(filtered_proxies)} after filtering socks4.")
+                # 过滤掉 httpx 不支持的 socks4 和 socks5 代理
+                filtered_proxies = [p for p in proxies if not p.startswith("socks4://") and not p.startswith("socks5://")]
+                print(f"Fetched {len(proxies)} proxies from source, {len(filtered_proxies)} after filtering socks4 and socks5.")
                 return filtered_proxies
             else:
                 print(f"Failed to fetch proxies, status code: {response.status_code}")
