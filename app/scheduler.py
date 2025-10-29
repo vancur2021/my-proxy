@@ -66,11 +66,11 @@ def setup_scheduler():
     """
     配置并启动所有定时任务。
     """
-    # 任务一：每 20 分钟获取一次新代理
-    scheduler.add_job(fetch_and_validate_proxies, 'interval', minutes=20, id='fetch_proxies')
+    # 任务一：每 1 小时获取一次新代理
+    scheduler.add_job(fetch_and_validate_proxies, 'interval', hours=1, id='fetch_proxies')
     
-    # 任务二：每 5 分钟清理一次无效代理
-    scheduler.add_job(revalidate_existing_proxies, 'interval', minutes=5, id='revalidate_proxies')
+    # 任务二：每 30 分钟清理一次无效代理
+    scheduler.add_job(revalidate_existing_proxies, 'interval', minutes=30, id='revalidate_proxies')
     
     # 启动调度器
     scheduler.start()
