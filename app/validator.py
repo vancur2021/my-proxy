@@ -42,8 +42,7 @@ async def fetch_source_proxies() -> list[str]:
     """
     从源 URL 获取代理列表。
     """
-    url = "https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/all/data.txt"
-    # url = "https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/countries/CA/data.txt"
+    url = "https://raw.staticdn.net/proxifly/free-proxy-list/refs/heads/main/proxies/all/data.txt"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, timeout=20)
