@@ -42,7 +42,7 @@ async def fetch_source_proxies() -> list[str]:
     """
     从源 URL 获取代理列表。
     """
-    url = "https://raw.kkgithub.com/proxifly/free-proxy-list/refs/heads/main/proxies/protocols/https/data.txt"
+    url = "https://raw.kkgithub.com/proxifly/free-proxy-list/refs/heads/main/proxies/protocols/http/data.txt"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, timeout=20)
