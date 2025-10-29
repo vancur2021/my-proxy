@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+httpx[socks]>=0.25.0
+redis
+apscheduler
+python-dotenv
