@@ -50,18 +50,15 @@ def add_proxies(proxies_with_latency: list[tuple[str, int]]):
 
 def get_best_proxy() -> str | None:
     """
-    从 Redis 中获取延迟最低的前10个代理，并从中随机选择一个返回。
+    从 Redis 中获取延迟最低（分数最高）的代理。
     """
     with get_redis_client() as client:
         if client:
             try:
-                # ZRANGE 0 9 获取分数最低（延迟最低）的前10个代理
-                top_proxies = client.zrange(PROXY_KEY, 0, 9)
-                if not top_proxies:
-                    return None
-                # 从高质量代理中随机选择一个，实现负载均衡
-                import random
-                return random.choice(top_proxies)
+                # ZRANGE 0 0 获取分数最低的第一个代理
+                best_proxies = client.zrange(PROXY_KEY, 0, 0)
+                if best_proxies:
+                    return best_proxies[0]
             except redis.RedisError as e:
                 print(f"!!! Redis Error while getting best proxy: {e} !!!")
     return None
