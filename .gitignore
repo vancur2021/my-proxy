@@ -124,3 +124,6 @@ dmypy.json
 # IDE settings
 .vscode/
 .idea/
+.DS_Store
+.python-version
+__pycache__/
