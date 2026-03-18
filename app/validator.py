@@ -4,7 +4,7 @@ from httpx import AsyncHTTPTransport
 from . import crud
 
 # 验证代理的目标 URL 和超时设置
-VALIDATION_URL = "https://quote.eastmoney.com/"
+VALIDATION_URL = "https://push2.eastmoney.com"
 VALIDATION_TIMEOUT = 8  # seconds
 MAX_CONCURRENCY = 100 # 最大并发数
 
@@ -42,7 +42,7 @@ async def fetch_source_proxies() -> list[str]:
     """
     从源 URL 获取代理列表。
     """
-    url = "https://raw.kkgithub.com/proxifly/free-proxy-list/refs/heads/main/proxies/all/data.txt"
+    url = "https://raw.githubusercontent.com/proxifly/free-proxy-list/refs/heads/main/proxies/all/data.txt"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, timeout=20)
