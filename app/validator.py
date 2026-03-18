@@ -1,5 +1,6 @@
 import httpx
 import asyncio
+import time
 from httpx import AsyncHTTPTransport
 from . import crud
 
@@ -16,11 +17,12 @@ async def validate_proxy(proxy: str, semaphore: asyncio.Semaphore, redis_key: st
         try:
             transport = AsyncHTTPTransport(proxy=proxy)
             async with httpx.AsyncClient(transport=transport, timeout=VALIDATION_TIMEOUT) as client:
-                start_time = asyncio.get_event_loop().time()
+                start_time = time.perf_counter()
                 response = await client.get(VALIDATION_URL)
-                end_time = asyncio.get_event_loop().time()
+                end_time = time.perf_counter()
                 
-                if response.status_code == 200:
+                # push2.eastmoney.com 根路径默认返回 404，只要能连通并返回 HTTP 状态码，就说明代理可用
+                if response.status_code in (200, 404):
                     latency = int((end_time - start_time) * 1000)  # 转换为毫秒
                     print(f"Proxy {proxy} is valid, latency: {latency}ms. Adding to {redis_key}...")
                     crud.add_single_proxy(proxy, latency, redis_key)
@@ -29,6 +31,9 @@ async def validate_proxy(proxy: str, semaphore: asyncio.Semaphore, redis_key: st
         except ValueError as e:
             # 捕获 httpx 不支持的代理类型, 例如 socks4
             print(f"Proxy {proxy} has unsupported type: {e}")
+        except Exception as e:
+            # 兜底捕获，防止未知异常中断程序
+            print(f"Proxy {proxy} unexpected error: {e}")
 
 async def check_proxies(proxies: list[str], redis_key: str = crud.PROXY_KEY):
     """
